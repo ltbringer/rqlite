@@ -21,6 +21,6 @@ pub fn repl() {
         exec_cmd(parse_command(&raw_cmd.trim()));
 
         let response = exec_query(parse_query(&raw_cmd.trim()));
-        write!(lock, "{}\n", response).unwrap();
+        write!(lock, "{}\n\n", response).unwrap();
     }
 }
