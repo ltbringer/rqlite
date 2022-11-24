@@ -1,6 +1,6 @@
 use std::process;
 use super::commands::{QueryType, MetaCommands, Query};
-use super::mock::db;
+use super::mock::{db, RecordFactory, TDTypes};
 
 pub fn exec_cmd(cmd: MetaCommands) -> () {
     match cmd {
@@ -36,10 +36,25 @@ pub fn exec_query(q: Query) -> String {
             return format!("{:#?}", db_);
         },
         QueryType::INSERT => {
-            let last = *db_.last().unwrap();
-            let last_id = last.0;
-            db_.push((last_id + 1, "...", 18, 12, 50_000));
-            return format!("{:?}", db_);
+            let last = db_.last().unwrap();
+            let last_id = match last.get("id").unwrap() {
+                TDTypes::Int(v) => *v,
+                _ => 0
+            };
+            if let Some(v) = q.values {
+                let id = TDTypes::Int(last_id + 1);
+                let name = TDTypes::Str(&v[0]);
+                let salary = TDTypes::Int(v[1].parse::<u32>().unwrap());
+                let record = RecordFactory::new()
+                    .set("id", id)
+                    .set("name", name)
+                    .set("salary", salary)
+                    .clone();
+
+                db_.push(record);
+                return format!("{:#?}", db_);
+            }
+            return format!("{:#?}", db_);
         },
         _ => "SQL Parsing failed.".to_string()
     }
