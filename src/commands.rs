@@ -13,7 +13,7 @@ pub enum QueryType {
 
 pub struct Query {
     pub command: QueryType,
-    pub columns: (String,),
-    pub table: String,
-    pub values: (String,)
+    pub columns: Option<Vec<String>>,
+    pub table: Option<String>,
+    pub values: Option<Vec<String>>
 }
