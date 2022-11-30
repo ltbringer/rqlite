@@ -1,8 +1,11 @@
 use std::io::{stdout, stdin, Write};
+use super::commands::parser::Parser;
+use super::commands::exec::run_command;
 
 pub fn repl() {
     let prompt: &str = "sqlite> ";
     let mut lock = stdout().lock();
+    let parser = Parser::build();
 
     loop {
         let mut raw_cmd = String::new();
@@ -16,9 +19,8 @@ pub fn repl() {
             .read_line(&mut raw_cmd)
             .expect("Failed to read query");
 
-        // exec_cmd(parse_command(&raw_cmd.trim()));
-
-        // let response = exec_query(parse_query(&raw_cmd.trim()));
-        // write!(lock, "{}\n\n", response).unwrap();
+        raw_cmd = String::from(raw_cmd.trim());
+        let cmd = parser.parse(raw_cmd);
+        run_command(cmd);
     }
 }
