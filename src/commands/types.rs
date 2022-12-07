@@ -116,10 +116,6 @@ pub struct Db {
 }
 
 impl Db {
-    // pub fn get<'a>(self, name: &str) -> Option<&'a Table> {
-    //     self.tables.get(name)
-    // }
-
     pub fn new() -> Self {
         let tables = HashMap::new();
         Db { tables, n_tables: 0 }
