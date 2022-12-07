@@ -87,7 +87,6 @@ fn build_insert_query(captures: Captures) -> Command {
 }
 
 fn build_query(text: String, pattern: &'static str, qbuilder: fn(Captures) -> Command) -> Command {
-    println!("{} {}", text, pattern);
     let re = Regex::new(pattern).unwrap();
     let captures = re.captures(&text);
     match captures {
